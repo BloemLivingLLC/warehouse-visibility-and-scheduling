@@ -53,6 +53,31 @@ Credentials will need to be provided securely by Bloem IT.
 - A 404 response containing "No records found" can mean there are no matching records.
 - We should test in Bloem's training environment before attempting production integration.
 
+## Warehouse Options
+Bloem has five warehouse environments listed in the API documentation:
+
+- WM01 - Apopka
+- WM04 - CustomPak
+- WM07 - Iceberg
+- WM08 - Kentcity
+- WM09 - Hol Special Delivery
+
+The training environment (TRN) paths are already provided in Marcus's PDF. We just need Bloem to confirm which warehouse we should use for initial testing.
+
+## Shipment Filtering Limitations
+The shipment list endpoint (`bodlist/showshipmentorderlist`) does not support filtering by date, status, or carrier.
+
+Because of this, we'll need to handle filtering through our own backend or database instead of relying on Infor WMS to filter the results.
+
+The endpoint also uses serialkey-based pagination, so we'll need to keep track of the last serialkey when retrieving additional records.
+
+## Existing Order Updates
+One thing that still needs clarification is how we'll detect changes to existing shipment orders.
+
+The API documentation explains how to retrieve newer orders using serialkey pagination, but it hasn't been confirmed whether this also captures updates to existing orders.
+
+We'll need to follow up with Bloem about this before deciding how to keep shipment information updated.
+
 ## Questions for Bloem
 1. Can we get the OAuth credentials and service account for the training environment?
 2. Which warehouse should we use for initial testing?
