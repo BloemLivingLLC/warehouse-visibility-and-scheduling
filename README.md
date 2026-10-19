@@ -1,10 +1,62 @@
-# f26-warehouse-visibility-and-scheduling
 
-Warehouse Visibility and Truck Scheduling Platform: Foundation for an Agentic TMS
-Sponsor Organization:  Bloem, LLC
+# Bloem Warehouse Visibility and Scheduling
 
-High-Level Description				
-Bloem is a West Michigan-based consumer lawn and garden manufacturer whose planters are sold at Walmart, Lowe's, Home Depot, ACE, and Menards. We ship high volumes of truckload and LTL freight from our warehouses, and today truck scheduling and carrier booking are handled manually through email and customer TMS portals. The student team will build a logistics visibility and truck-scheduling web application on top of Bloem's warehouse management (WMS) data: (1) shipment-visibility dashboards over outbound orders and loads (read-only data extracts provided by Bloem), (2) a dock/pickup scheduling calendar, and (3) a carrier-booking workbench that generates and tracks booking requests (drafted emails and data formatted for customer TMS portals). This system is the foundation for Bloem's longer-term initiative toward an agentic TMS that autonomously schedules and books trucks, so a clean data model and well-documented APIs are a priority. Platform preference: Python or TypeScript backend with a React front-end; Postgres available. Timing: Fall 2026 or Winter 2027 both work for us.
-Description of the Deliverable
-A working web application delivering shipment-visibility dashboards over WMS data, a dock/pickup scheduling calendar, and a carrier-booking workbench that generates booking-request emails and portal-ready load data, plus a documented API, a GitHub repository transferred to Bloem, and a final technical report.
+A senior capstone project developed by Grand Valley State University (GVSU) students in collaboration with Bloem Living.
 
+## Project Overview
+
+This project focuses on developing a web application to improve warehouse shipment visibility, truck scheduling, and carrier booking for Bloem Living.
+
+The application will integrate with Bloem's Infor Warehouse Management System (WMS) to provide shipment information and help streamline existing logistics operations.
+
+## Main Features
+
+- **Shipment Visibility Dashboard:** View, search, and track outbound shipments and their statuses.
+- **Dock and Pickup Scheduling:** Manage truck pickup appointments and warehouse scheduling.
+- **Carrier Booking:** Help organize carrier booking requests and simplify the booking process.
+- **Infor WMS Integration:** Retrieve shipment and load information through Bloem's existing warehouse management system.
+
+## Technology Stack
+
+**Frontend**
+- React
+- TypeScript
+- Vite
+
+**Backend**
+- Python
+- FastAPI
+
+**Integration**
+- Infor WMS
+- Infor ION API Gateway
+
+**Development Tools**
+- GitHub
+- Visual Studio Code
+- Linear
+
+## Project Structure
+
+```text
+warehouse-visibility-and-scheduling/
+├── backend/
+├── frontend/
+├── docs/
+├── .gitignore
+└── README.md
+```
+
+## Development Team
+
+**Grand Valley State University - CIS 467 Senior Capstone**
+
+- Kevin Dam - Team Lead / Backend Development
+- CK - Frontend Development
+- Emmit - Database and Data Integration
+
+**Client:** Bloem Living
+
+## Project Status
+
+This project is currently under active development as part of the GVSU Senior Capstone program.
