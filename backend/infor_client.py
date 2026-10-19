@@ -1,6 +1,9 @@
 import os
 import time
 import httpx
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class InforClient:
