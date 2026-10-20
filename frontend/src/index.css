@@ -12,6 +12,14 @@
   --ok: #2f8a4e;
   --bad: #c0392b;
 
+  /* Status colors, shared by table badges and calendar events */
+  --status-scheduled-bg: #dce7f5;
+  --status-scheduled-text: #1f4e7a;
+  --status-shipped-bg: #d7e7d9;
+  --status-shipped-text: #183822;
+  --status-pending-bg: #f5e1d3;
+  --status-pending-text: #8a4520;
+
   --font-body: 'DM Sans', Helvetica, Arial, sans-serif;
   --font-heading: 'Source Serif 4', Georgia, 'Times New Roman', serif;
 
@@ -203,22 +211,48 @@ body {
 }
 
 .status--scheduled {
-  background: #dce7f5;
-  color: #1f4e7a;
+  background: var(--status-scheduled-bg);
+  color: var(--status-scheduled-text);
 }
 
 .status--shipped {
-  background: #d7e7d9;
-  color: #183822;
+  background: var(--status-shipped-bg);
+  color: var(--status-shipped-text);
 }
 
 .status--pending {
-  background: #f5e1d3;
-  color: #8a4520;
+  background: var(--status-pending-bg);
+  color: var(--status-pending-text);
 }
 
 .empty-state {
   padding: 2rem;
   text-align: center;
   color: var(--muted);
+}
+
+/* ---------- Dock schedule calendar ---------- */
+
+/* FullCalendar colors each event from these --fc-event-* variables,
+   so setting them on an event's class recolors just that event. */
+.event--scheduled {
+  --fc-event-bg-color: var(--status-scheduled-bg);
+  --fc-event-border-color: var(--status-scheduled-bg);
+  --fc-event-text-color: var(--status-scheduled-text);
+}
+
+.event--shipped {
+  --fc-event-bg-color: var(--status-shipped-bg);
+  --fc-event-border-color: var(--status-shipped-bg);
+  --fc-event-text-color: var(--status-shipped-text);
+}
+
+.event--pending {
+  --fc-event-bg-color: var(--status-pending-bg);
+  --fc-event-border-color: var(--status-pending-bg);
+  --fc-event-text-color: var(--status-pending-text);
+}
+
+.fc .fc-event {
+  font-weight: 700;
 }

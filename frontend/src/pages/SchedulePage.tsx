@@ -14,6 +14,7 @@ function toCalendarEvent(shipment: Shipment): EventInput {
     title: `${shipment.order_number} · ${shipment.customer}`,
     start: shipment.ship_date,
     allDay: true,
+    classNames: [`event--${shipment.status.toLowerCase()}`],
     extendedProps: { shipment },
   }
 }
