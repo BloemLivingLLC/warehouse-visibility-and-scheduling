@@ -1,35 +1,11 @@
-import { useEffect, useState } from 'react'
-import { getShipments, type Shipment } from '../api/client'
-
-//"2026-10-20" -> "Oct 20, 2026". Adding T00:00 keeps it in local time
-//otherwise the date is read as UTC and can show up a day early
-function formatDate(isoDate: string) {
-  return new Date(`${isoDate}T00:00:00`).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
-}
+import { useState } from 'react'
+import { useShipments } from '../hooks/useShipments'
+import { formatDate } from '../utils/formatDate'
 
 export default function ShipmentsPage() {
-  const [shipments, setShipments] = useState<Shipment[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
+  const { shipments, loading, error } = useShipments()
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('All')
-
-  useEffect(() => {
-    //runs once component shows up
-    getShipments()
-      .then((data) => {
-        setShipments(data)
-        setLoading(false)
-      })
-      .catch(() => {
-        setError("Couldn't load shipments. Is the backend running?")
-        setLoading(false)
-      })
-  }, [])
 
   if (loading) return <p>Loading shipments…</p>
   if (error) return <p>{error}</p>
