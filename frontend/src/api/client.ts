@@ -27,3 +27,21 @@ export type HealthResponse = { status: string }
 export function getHealth() {
   return apiGet<HealthResponse>('/health')
 }
+
+export type Shipment = {
+  orderkey: number
+  order_number: string
+  status: string
+  carrier: string
+  ship_date: string
+  load_id: string
+  customer: string
+  warehouse: string
+  destination: string
+  weight_lbs: number
+  pallet_count: number
+}
+
+export function getShipments() {
+  return apiGet<Shipment[]>('/shipments')
+}

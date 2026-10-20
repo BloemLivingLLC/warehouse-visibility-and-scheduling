@@ -1,8 +1,120 @@
+import { useEffect, useState } from 'react'
+import { getShipments, type Shipment } from '../api/client'
+
+//"2026-10-20" -> "Oct 20, 2026". Adding T00:00 keeps it in local time
+//otherwise the date is read as UTC and can show up a day early
+function formatDate(isoDate: string) {
+  return new Date(`${isoDate}T00:00:00`).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}
+
 export default function ShipmentsPage() {
+  const [shipments, setShipments] = useState<Shipment[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState('All')
+
+  useEffect(() => {
+    //runs once component shows up
+    getShipments()
+      .then((data) => {
+        setShipments(data)
+        setLoading(false)
+      })
+      .catch(() => {
+        setError("Couldn't load shipments. Is the backend running?")
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) return <p>Loading shipments…</p>
+  if (error) return <p>{error}</p>
+
+  //recalculated on every render from shipments + search, so it never goes stale
+  const query = search.trim().toLowerCase()
+  const filteredShipments = shipments.filter((s) => {
+    const matchesStatus = statusFilter === 'All' || s.status === statusFilter
+    const matchesSearch =
+      s.order_number.toLowerCase().includes(query) ||
+      s.customer.toLowerCase().includes(query) ||
+      s.load_id.toLowerCase().includes(query) ||
+      s.destination.toLowerCase().includes(query)
+    return matchesStatus && matchesSearch
+  })
+
   return (
     <section>
-      <h1>Shipment Visibility</h1>
-      <p>Outbound orders and loads from Bloem's WMS data will appear here.</p>
+      <h1 className="page-title">Shipment Visibility</h1>
+
+      <div className="toolbar">
+        <input
+          className="search-input"
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search order #, customer, load ID, destination…"
+        />
+        <select
+          className="filter-select"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="All">All statuses</option>
+          <option value="Scheduled">Scheduled</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Pending">Pending</option>
+        </select>
+        <p className="result-count">
+          {filteredShipments.length} of {shipments.length} shipments
+        </p>
+      </div>
+
+      <div className="table-wrap">
+        <table className="shipments-table">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Customer</th>
+              <th>Status</th>
+              <th>Ship Date</th>
+              <th>Carrier</th>
+              <th>Load ID</th>
+              <th>Warehouse</th>
+              <th>Destination</th>
+              <th className="num">Pallets</th>
+              <th className="num">Weight (lbs)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredShipments.map((shipment) => (
+              <tr key={shipment.orderkey}>
+                <td className="order-number">{shipment.order_number}</td>
+                <td>{shipment.customer}</td>
+                <td>
+                  <span className={`status status--${shipment.status.toLowerCase()}`}>
+                    {shipment.status}
+                  </span>
+                </td>
+                <td>{formatDate(shipment.ship_date)}</td>
+                <td>{shipment.carrier}</td>
+                <td>{shipment.load_id}</td>
+                <td>{shipment.warehouse}</td>
+                <td>{shipment.destination}</td>
+                <td className="num">{shipment.pallet_count}</td>
+                <td className="num">{shipment.weight_lbs.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {filteredShipments.length === 0 && (
+          <p className="empty-state">No shipments match your filters.</p>
+        )}
+      </div>
     </section>
   )
 }
