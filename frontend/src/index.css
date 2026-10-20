@@ -1,14 +1,21 @@
+/* Colors and fonts follow Bloem's brand (bloemliving.com) */
 :root {
-  --bg: #f6f7f5;
+  --bg: #fafbf9;
   --surface: #ffffff;
-  --text: #1d2420;
-  --muted: #5f6b64;
-  --border: #dde2de;
-  --accent: #2f6b45;
+  --text: #183822; /* Bloem forest green */
+  --muted: #5b6f60;
+  --border: #dbe3dc;
+  --accent: #183822;
+  --sky: #82aedb; /* Bloem sky blue */
+  --header-bg: #dce7f5; /* Bloem pale blue */
+  --row-hover: #f1f6fb;
   --ok: #2f8a4e;
   --bad: #c0392b;
 
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'DM Sans', Helvetica, Arial, sans-serif;
+  --font-heading: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+
+  font-family: var(--font-body);
   color: var(--text);
   background: var(--bg);
 }
@@ -27,12 +34,13 @@ body {
   align-items: center;
   gap: 2rem;
   padding: 0.75rem 1.5rem;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  background: var(--header-bg);
 }
 
 .app-header__title {
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 500;
   color: var(--accent);
 }
 
@@ -47,6 +55,10 @@ body {
   text-decoration: none;
   padding: 0.25rem 0;
   border-bottom: 2px solid transparent;
+}
+
+.app-nav a {
+  font-weight: 500;
 }
 
 .app-nav a.active {
@@ -81,4 +93,132 @@ body {
 
 .backend-status--offline .backend-status__dot {
   background: var(--bad);
+}
+
+/* ---------- Shipments page ---------- */
+
+.page-title {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: 2.25rem;
+  margin: 0.5rem 0 1.25rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* Outlined, rounded controls like Bloem's buttons */
+.search-input,
+.filter-select {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 11px;
+  padding: 0.5rem 0.85rem;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 240px;
+  max-width: 420px;
+}
+
+.search-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: var(--sky);
+}
+
+.result-count {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Lets the table scroll sideways on narrow screens instead of breaking the page */
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+}
+
+.shipments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.shipments-table th,
+.shipments-table td {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.shipments-table th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  border-bottom: 2px solid var(--border);
+}
+
+.shipments-table td {
+  border-bottom: 1px solid var(--border);
+}
+
+.shipments-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.shipments-table tbody tr:hover {
+  background: var(--row-hover);
+}
+
+/* Right-align numbers so the digits line up */
+.shipments-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.order-number {
+  font-weight: 700;
+}
+
+/* Status badges: the word stays visible so meaning never relies on color alone */
+.status {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status--scheduled {
+  background: #dce7f5;
+  color: #1f4e7a;
+}
+
+.status--shipped {
+  background: #d7e7d9;
+  color: #183822;
+}
+
+.status--pending {
+  background: #f5e1d3;
+  color: #8a4520;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted);
 }

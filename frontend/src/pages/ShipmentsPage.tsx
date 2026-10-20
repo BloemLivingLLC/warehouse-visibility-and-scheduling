@@ -48,58 +48,73 @@ export default function ShipmentsPage() {
 
   return (
     <section>
-      <h1>Shipment Visibility</h1>
+      <h1 className="page-title">Shipment Visibility</h1>
 
-      <input
-        type="search"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search order #, customer, load ID, destination…"
-      />
-      <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-        <option value="All">All statuses</option>
-        <option value="Scheduled">Scheduled</option>
-        <option value="Shipped">Shipped</option>
-        <option value="Pending">Pending</option>
-      </select>
-      <p>
-        {filteredShipments.length} of {shipments.length} shipments
-      </p>
+      <div className="toolbar">
+        <input
+          className="search-input"
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search order #, customer, load ID, destination…"
+        />
+        <select
+          className="filter-select"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="All">All statuses</option>
+          <option value="Scheduled">Scheduled</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Pending">Pending</option>
+        </select>
+        <p className="result-count">
+          {filteredShipments.length} of {shipments.length} shipments
+        </p>
+      </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Order #</th>
-            <th>Customer</th>
-            <th>Status</th>
-            <th>Ship Date</th>
-            <th>Carrier</th>
-            <th>Load ID</th>
-            <th>Warehouse</th>
-            <th>Destination</th>
-            <th>Pallets</th>
-            <th>Weight (lbs)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredShipments.map((shipment) => (
-            <tr key={shipment.orderkey}>
-              <td>{shipment.order_number}</td>
-              <td>{shipment.customer}</td>
-              <td>{shipment.status}</td>
-              <td>{formatDate(shipment.ship_date)}</td>
-              <td>{shipment.carrier}</td>
-              <td>{shipment.load_id}</td>
-              <td>{shipment.warehouse}</td>
-              <td>{shipment.destination}</td>
-              <td>{shipment.pallet_count}</td>
-              <td>{shipment.weight_lbs.toLocaleString()}</td>
+      <div className="table-wrap">
+        <table className="shipments-table">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Customer</th>
+              <th>Status</th>
+              <th>Ship Date</th>
+              <th>Carrier</th>
+              <th>Load ID</th>
+              <th>Warehouse</th>
+              <th>Destination</th>
+              <th className="num">Pallets</th>
+              <th className="num">Weight (lbs)</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredShipments.map((shipment) => (
+              <tr key={shipment.orderkey}>
+                <td className="order-number">{shipment.order_number}</td>
+                <td>{shipment.customer}</td>
+                <td>
+                  <span className={`status status--${shipment.status.toLowerCase()}`}>
+                    {shipment.status}
+                  </span>
+                </td>
+                <td>{formatDate(shipment.ship_date)}</td>
+                <td>{shipment.carrier}</td>
+                <td>{shipment.load_id}</td>
+                <td>{shipment.warehouse}</td>
+                <td>{shipment.destination}</td>
+                <td className="num">{shipment.pallet_count}</td>
+                <td className="num">{shipment.weight_lbs.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      {filteredShipments.length === 0 && <p>No shipments match your filters.</p>}
+        {filteredShipments.length === 0 && (
+          <p className="empty-state">No shipments match your filters.</p>
+        )}
+      </div>
     </section>
   )
 }
