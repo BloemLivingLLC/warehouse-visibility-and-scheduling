@@ -255,4 +255,77 @@ body {
 
 .fc .fc-event {
   font-weight: 700;
+  cursor: pointer;
+}
+
+/* Calendar on the left, details panel on the right when a shipment is selected */
+.schedule-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.schedule-layout--open {
+  grid-template-columns: minmax(0, 1fr) 300px;
+}
+
+/* On narrow screens the panel drops below the calendar */
+@media (max-width: 900px) {
+  .schedule-layout--open {
+    grid-template-columns: 1fr;
+  }
+}
+
+.details-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 1.25rem;
+}
+
+.details-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.details-panel__header h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+
+.details-panel__close {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: transparent;
+  border: 2px solid var(--border);
+  border-radius: 11px;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+}
+
+.details-panel__close:hover {
+  border-color: var(--text);
+}
+
+.details-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  margin: 1rem 0 0;
+}
+
+.details-list dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.details-list dd {
+  margin: 0;
+  font-weight: 500;
 }
