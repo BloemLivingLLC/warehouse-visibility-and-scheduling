@@ -329,3 +329,80 @@ body {
   margin: 0;
   font-weight: 500;
 }
+
+/* ---------- Calendar theme (Bloem) ---------- */
+
+/* FullCalendar reads these variables for its colors. Setting them on .fc
+   overrides the defaults for every calendar on the site. */
+.fc {
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: var(--surface);
+  --fc-today-bg-color: var(--row-hover);
+  --fc-now-indicator-color: var(--status-pending-text);
+
+  /* Outlined buttons like bloemliving.com; the selected view is solid green */
+  --fc-button-bg-color: var(--surface);
+  --fc-button-border-color: var(--border);
+  --fc-button-text-color: var(--text);
+  --fc-button-hover-bg-color: var(--row-hover);
+  --fc-button-hover-border-color: var(--text);
+  --fc-button-active-bg-color: var(--text);
+  --fc-button-active-border-color: var(--text);
+}
+
+/* The extra .fc-toolbar keeps these rules more specific than FullCalendar's own,
+   which are injected after this file and would otherwise win ties. */
+.fc .fc-toolbar .fc-button {
+  border-width: 2px;
+  border-radius: 11px;
+  font-weight: 500;
+  padding: 0.35rem 0.85rem;
+}
+
+.fc .fc-toolbar .fc-button-primary:not(:disabled).fc-button-active {
+  color: var(--surface);
+}
+
+.fc .fc-toolbar .fc-button-primary:focus,
+.fc .fc-toolbar .fc-button-primary:not(:disabled).fc-button-active:focus {
+  box-shadow: 0 0 0 3px var(--header-bg);
+}
+
+.fc .fc-toolbar-title {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.6rem;
+}
+
+/* White card behind the grid, matching the shipments table */
+.fc .fc-scrollgrid {
+  background: var(--surface);
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+/* Day-of-week headers styled like the table's column headers */
+.fc .fc-col-header-cell-cushion {
+  padding: 0.6rem 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.fc .fc-daygrid-day-number {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.fc .fc-timegrid-slot-label,
+.fc .fc-timegrid-axis {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
