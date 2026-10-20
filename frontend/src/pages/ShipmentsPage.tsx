@@ -16,6 +16,7 @@ export default function ShipmentsPage() {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState('All')
 
   useEffect(() => {
     //runs once component shows up
@@ -35,13 +36,15 @@ export default function ShipmentsPage() {
 
   //recalculated on every render from shipments + search, so it never goes stale
   const query = search.trim().toLowerCase()
-  const filteredShipments = shipments.filter(
-    (s) =>
+  const filteredShipments = shipments.filter((s) => {
+    const matchesStatus = statusFilter === 'All' || s.status === statusFilter
+    const matchesSearch =
       s.order_number.toLowerCase().includes(query) ||
       s.customer.toLowerCase().includes(query) ||
       s.load_id.toLowerCase().includes(query) ||
-      s.destination.toLowerCase().includes(query),
-  )
+      s.destination.toLowerCase().includes(query)
+    return matchesStatus && matchesSearch
+  })
 
   return (
     <section>
@@ -53,6 +56,12 @@ export default function ShipmentsPage() {
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search order #, customer, load ID, destination…"
       />
+      <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+        <option value="All">All statuses</option>
+        <option value="Scheduled">Scheduled</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Pending">Pending</option>
+      </select>
       <p>
         {filteredShipments.length} of {shipments.length} shipments
       </p>
@@ -90,7 +99,7 @@ export default function ShipmentsPage() {
         </tbody>
       </table>
 
-      {filteredShipments.length === 0 && <p>No shipments match "{search}".</p>}
+      {filteredShipments.length === 0 && <p>No shipments match your filters.</p>}
     </section>
   )
 }
