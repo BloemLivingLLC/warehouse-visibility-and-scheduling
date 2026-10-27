@@ -29,17 +29,17 @@ export function getHealth() {
 }
 
 export type Shipment = {
-  orderkey: number
+  orderkey: string
   order_number: string
   status: string
   carrier: string
-  ship_date: string
+  ship_date: string | null
   load_id: string
   customer: string
   warehouse: string
   destination: string
-  weight_lbs: number
-  pallet_count: number
+  weight_lbs: number | null
+  pallet_count: number | null
 }
 
 export function getShipments() {

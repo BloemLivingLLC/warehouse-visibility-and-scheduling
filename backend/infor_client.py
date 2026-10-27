@@ -14,6 +14,7 @@ class InforClient:
         self.client_id = os.getenv("INFOR_CLIENT_ID")
         self.client_secret = os.getenv("INFOR_CLIENT_SECRET")
         self.username = os.getenv("INFOR_USERNAME")
+        self.password = os.getenv("INFOR_PASSWORD")
 
         self.access_token = None
         self.token_expires_at = 0
@@ -34,7 +35,9 @@ class InforClient:
         if not all([
             self.token_url,
             self.client_id,
-            self.client_secret
+            self.client_secret,
+            self.username,
+            self.password
         ]):
             raise ValueError("Missing Infor API credentials")
 
@@ -42,9 +45,11 @@ class InforClient:
         response = httpx.post(
             self.token_url,
             data={
-                "grant_type": "client_credentials",
+                "grant_type": "password",
                 "client_id": self.client_id,
-                "client_secret": self.client_secret
+                "client_secret": self.client_secret,
+                "username": self.username,
+                "password": self.password
             },
             timeout=30
         )

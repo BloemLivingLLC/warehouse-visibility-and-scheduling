@@ -15,10 +15,10 @@ export default function ShipmentsPage() {
   const filteredShipments = shipments.filter((s) => {
     const matchesStatus = statusFilter === 'All' || s.status === statusFilter
     const matchesSearch =
-      s.order_number.toLowerCase().includes(query) ||
-      s.customer.toLowerCase().includes(query) ||
-      s.load_id.toLowerCase().includes(query) ||
-      s.destination.toLowerCase().includes(query)
+      (s.order_number ?? '').toLowerCase().includes(query) ||
+      (s.customer ?? '').toLowerCase().includes(query) ||
+      (s.load_id ?? '').toLowerCase().includes(query) ||
+      (s.destination ?? '').toLowerCase().includes(query)
     return matchesStatus && matchesSearch
   })
 
@@ -40,9 +40,14 @@ export default function ShipmentsPage() {
           onChange={(e) => setStatusFilter(e.target.value)}
         >
           <option value="All">All statuses</option>
-          <option value="Scheduled">Scheduled</option>
-          <option value="Shipped">Shipped</option>
-          <option value="Pending">Pending</option>
+          {Array.from(new Set(shipments.map((s) => s.status)))
+            .filter(Boolean)
+            .sort()
+            .map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
         </select>
         <p className="result-count">
           {filteredShipments.length} of {shipments.length} shipments
@@ -69,19 +74,19 @@ export default function ShipmentsPage() {
             {filteredShipments.map((shipment) => (
               <tr key={shipment.orderkey}>
                 <td className="order-number">{shipment.order_number}</td>
-                <td>{shipment.customer}</td>
+                <td>{shipment.customer || 'N/A'}</td>
                 <td>
                   <span className={`status status--${shipment.status.toLowerCase()}`}>
                     {shipment.status}
                   </span>
                 </td>
-                <td>{formatDate(shipment.ship_date)}</td>
-                <td>{shipment.carrier}</td>
-                <td>{shipment.load_id}</td>
-                <td>{shipment.warehouse}</td>
-                <td>{shipment.destination}</td>
-                <td className="num">{shipment.pallet_count}</td>
-                <td className="num">{shipment.weight_lbs.toLocaleString()}</td>
+                <td>{shipment.ship_date ? formatDate(shipment.ship_date) : 'N/A'}</td>
+                <td>{shipment.carrier || 'N/A'}</td>
+                <td>{shipment.load_id || 'N/A'}</td>
+                <td>{shipment.warehouse || 'N/A'}</td>
+                <td>{shipment.destination || 'N/A'}</td>
+                <td className="num">{shipment.pallet_count ?? 'N/A'}</td>
+                <td className="num">{shipment.weight_lbs?.toLocaleString() ?? 'N/A'}</td>
               </tr>
             ))}
           </tbody>
