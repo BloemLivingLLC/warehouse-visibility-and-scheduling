@@ -13,8 +13,8 @@ import { useShipments } from '../hooks/useShipments'
 function toCalendarEvent(shipment: Shipment): EventInput {
   return {
     id: String(shipment.orderkey),
-    title: `${shipment.order_number} · ${shipment.customer}`,
-    start: shipment.ship_date,
+    title: shipment.customer ? `${shipment.order_number} · ${shipment.customer}` : shipment.order_number,
+    start: shipment.ship_date ?? undefined,
     allDay: true,
     classNames: [`event--${shipment.status.toLowerCase()}`],
     extendedProps: { shipment },
@@ -35,7 +35,9 @@ export default function SchedulePage() {
   if (loading) return <p>Loading schedule…</p>
   if (error) return <p>{error}</p>
 
-  const events = shipments.map(toCalendarEvent)
+  const datedShipments = shipments.filter((s) => s.ship_date)
+  const undatedCount = shipments.length - datedShipments.length
+  const events = datedShipments.map(toCalendarEvent)
 
   //fullCalendar passes the clicked event; we stored the shipment on it in toCalendarEvent
   function handleEventClick(info: EventClickArg) {
@@ -45,6 +47,11 @@ export default function SchedulePage() {
   return (
     <section>
       <h1 className="page-title">Dock / Pickup Schedule</h1>
+      {undatedCount > 0 && (
+        <p className="result-count">
+          {undatedCount} shipment{undatedCount === 1 ? '' : 's'} not shown (no ship date yet)
+        </p>
+      )}
       <div className={selectedShipment ? 'schedule-layout schedule-layout--open' : 'schedule-layout'}>
         <FullCalendar
           ref={calendarRef}
