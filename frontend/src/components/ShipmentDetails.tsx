@@ -6,7 +6,7 @@ type ShipmentDetailsProps = {
   onClose: () => void
 }
 
-// Side panel showing every field of one shipment.
+//side panel showing every field of one shipment.
 export default function ShipmentDetails({ shipment, onClose }: ShipmentDetailsProps) {
   return (
     <aside className="details-panel">
@@ -23,21 +23,21 @@ export default function ShipmentDetails({ shipment, onClose }: ShipmentDetailsPr
 
       <dl className="details-list">
         <dt>Customer</dt>
-        <dd>{shipment.customer}</dd>
+        <dd>{shipment.customer || 'N/A'}</dd>
         <dt>Ship date</dt>
-        <dd>{formatDate(shipment.ship_date)}</dd>
+        <dd>{shipment.ship_date ? formatDate(shipment.ship_date) : 'N/A'}</dd>
         <dt>Carrier</dt>
-        <dd>{shipment.carrier}</dd>
+        <dd>{shipment.carrier?.trim() || 'N/A'}</dd>
         <dt>Load ID</dt>
-        <dd>{shipment.load_id}</dd>
+        <dd>{shipment.load_id || 'N/A'}</dd>
         <dt>Warehouse</dt>
-        <dd>{shipment.warehouse}</dd>
+        <dd>{shipment.warehouse || 'N/A'}</dd>
         <dt>Destination</dt>
-        <dd>{shipment.destination}</dd>
+        <dd>{shipment.destination || 'N/A'}</dd>
         <dt>Pallets</dt>
-        <dd>{shipment.pallet_count}</dd>
+        <dd>{shipment.pallet_count ?? 'N/A'}</dd>
         <dt>Weight</dt>
-        <dd>{shipment.weight_lbs.toLocaleString()} lbs</dd>
+        <dd>{shipment.weight_lbs != null ? `${shipment.weight_lbs.toLocaleString()} lbs` : 'N/A'}</dd>
       </dl>
     </aside>
   )
