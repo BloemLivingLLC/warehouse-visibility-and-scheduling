@@ -9,6 +9,31 @@ app = FastAPI(
 )
 
 
+# Shipment status codes provided by Bloem
+SHIPMENT_STATUSES = {
+    "00": "Empty Order",
+    "02": "Created Externally",
+    "04": "Created Internally",
+    "06": "Did Not Allocate",
+    "09": "Not Started",
+    "14": "Part Allocated",
+    "17": "Allocated",
+    "22": "Part Released",
+    "29": "Released",
+    "51": "Part Picked",
+    "52": "Part Picked",
+    "55": "Picked Complete",
+    "61": "Picked Complete",
+    "68": "Pack Complete",
+    "75": "Staged",
+    "82": "In Loading",
+    "88": "Loaded",
+    "92": "Part Shipped",
+    "95": "Shipped Complete",
+    "99": "Cancelled Internally"
+}
+
+
 @app.get("/")
 def home():
     return {
@@ -35,10 +60,15 @@ def format_shipment(s):
         part for part in [city, state] if part
     )
 
+    # Convert shipment status into a two-digit string
+    raw_status = s.get("status")
+    status = str(raw_status).zfill(2) if raw_status is not None and str(raw_status) != "" else ""
+
     return {
         "orderkey": s.get("orderkey"),
         "order_number": s.get("externorderkey") or s.get("orderkey") or "",
-        "status": s.get("status") or "",
+        "status": status,
+        "status_label": SHIPMENT_STATUSES.get(status, "Unknown"),
         "carrier": s.get("carriername") or "",
         "ship_date": s.get("actualshipdate") or None,
         "load_id": s.get("loadid") or "",
