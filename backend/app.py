@@ -26,18 +26,27 @@ def health_check():
 
 # Convert Infor shipment data into the format our frontend uses
 def format_shipment(s):
+    # Handle field names from both list and detail responses
+    customer = s.get("c_company") or s.get("ccompany") or ""
+    city = s.get("c_city") or s.get("ccity") or ""
+    state = s.get("c_state") or s.get("cstate") or ""
+
+    destination = ", ".join(
+        part for part in [city, state] if part
+    )
+
     return {
         "orderkey": s.get("orderkey"),
-        "order_number": s.get("externalorderkey") or s.get("orderkey") or "",
+        "order_number": s.get("externorderkey") or s.get("orderkey") or "",
         "status": s.get("status") or "",
         "carrier": s.get("carriername") or "",
-        "ship_date": None,
+        "ship_date": s.get("actualshipdate") or None,
         "load_id": s.get("loadid") or "",
-        "customer": "",
-        "warehouse": "",
-        "destination": "",
+        "customer": customer,
+        "warehouse": s.get("whseid") or "",
+        "destination": destination,
         "weight_lbs": None,
-        "pallet_count": None
+        "pallet_count": s.get("totalpalletestimate")
     }
 
 
@@ -51,7 +60,39 @@ def get_shipments():
             "bodlist/showshipmentorderlist?recordcount=5"
         )
 
-        return [format_shipment(s) for s in records]
+        shipments = []
+
+        for record in records:
+            shipment = format_shipment(record)
+            orderkey = record.get("orderkey")
+
+            # Get additional details for this shipment
+            if orderkey:
+                try:
+                    detail = client.get(f"shipments/{orderkey}")
+
+                    if isinstance(detail, list):
+                        detail = detail[0] if detail else {}
+
+                    if isinstance(detail, dict):
+                        shipment["ship_date"] = (
+                            detail.get("actualshipdate") or None
+                        )
+
+                        shipment["pallet_count"] = (
+                            detail.get("totalpalletestimate")
+                        )
+
+                        # Keep weight empty until its unit is confirmed
+                        shipment["weight_lbs"] = None
+
+                except httpx.HTTPError:
+                    # Keep the basic shipment if details fail
+                    pass
+
+            shipments.append(shipment)
+
+        return shipments
 
     except (httpx.HTTPError, ValueError, KeyError):
         raise HTTPException(
