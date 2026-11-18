@@ -193,6 +193,16 @@ body {
   background: var(--row-hover);
 }
 
+/* Rows open the details panel when clicked */
+.shipments-table tbody tr {
+  cursor: pointer;
+}
+
+/* Highlights the row whose details are showing */
+.shipments-table tbody tr.is-selected {
+  background: var(--header-bg);
+}
+
 /* Right-align numbers so the digits line up */
 .shipments-table .num {
   text-align: right;
