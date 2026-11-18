@@ -1,5 +1,6 @@
 import type { Shipment } from '../api/client'
 import { formatDate } from '../utils/formatDate'
+import { statusTone } from '../utils/statusTone'
 
 type ShipmentDetailsProps = {
   shipment: Shipment
@@ -17,8 +18,8 @@ export default function ShipmentDetails({ shipment, onClose }: ShipmentDetailsPr
         </button>
       </div>
 
-      <span className={`status status--${shipment.status.toLowerCase()}`}>
-        {shipment.status}
+      <span className={`status status--${statusTone(shipment.status)}`}>
+        {shipment.status_label}
       </span>
 
       <dl className="details-list">

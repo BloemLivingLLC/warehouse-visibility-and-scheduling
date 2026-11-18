@@ -1,7 +1,9 @@
-//"2026-10-20" -> "Oct 20, 2026". Adding T00:00 keeps it in local time
-//otherwise the date is read as UTC and can show up a day early
+//"2026-10-20" or "2026-10-20T14:10:34.000+00:00" -> "Oct 20, 2026"
+//plain dates get T00:00 so they stay in local time instead of shifting a day early;
+//timestamps already include a time and timezone, so they're used as-is
 export function formatDate(isoDate: string) {
-  return new Date(`${isoDate}T00:00:00`).toLocaleDateString('en-US', {
+  const date = isoDate.includes('T') ? new Date(isoDate) : new Date(`${isoDate}T00:00:00`)
+  return date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',

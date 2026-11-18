@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Shipment } from '../api/client'
 import ShipmentDetails from '../components/ShipmentDetails'
 import { useShipments } from '../hooks/useShipments'
+import { statusTone } from '../utils/statusTone'
 
 //converts a shipment into the event shape FullCalendar expects
 //the full shipment rides along in extendedProps so a click can show its details later
@@ -16,7 +17,7 @@ function toCalendarEvent(shipment: Shipment): EventInput {
     title: shipment.customer ? `${shipment.order_number} · ${shipment.customer}` : shipment.order_number,
     start: shipment.ship_date ?? undefined,
     allDay: true,
-    classNames: [`event--${shipment.status.toLowerCase()}`],
+    classNames: [`event--${statusTone(shipment.status)}`],
     extendedProps: { shipment },
   }
 }
@@ -38,6 +39,10 @@ export default function SchedulePage() {
   const datedShipments = shipments.filter((s) => s.ship_date)
   const undatedCount = shipments.length - datedShipments.length
   const events = datedShipments.map(toCalendarEvent)
+  
+  //open on the earliest ship date so the calendar isn't empty;
+  //ISO date strings sort correctly as plain text ("2022-02-13..." < "2022-04-19...")
+  const firstShipDate = datedShipments.map((s) => s.ship_date as string).sort()[0]
 
   //fullCalendar passes the clicked event; we stored the shipment on it in toCalendarEvent
   function handleEventClick(info: EventClickArg) {
@@ -57,6 +62,7 @@ export default function SchedulePage() {
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
+          initialDate={firstShipDate}
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
