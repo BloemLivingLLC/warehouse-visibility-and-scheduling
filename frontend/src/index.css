@@ -22,6 +22,8 @@
 
   --font-body: 'DM Sans', Helvetica, Arial, sans-serif;
   --font-heading: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --status-problem-bg: #f6dada;
+  --status-problem-text: #9b2c2c;
 
   font-family: var(--font-body);
   color: var(--text);
@@ -76,7 +78,7 @@ body {
 
 .app-main {
   padding: 1.5rem;
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 
@@ -210,7 +212,12 @@ body {
   font-weight: 700;
 }
 
-.status--scheduled {
+.status--open {
+  background: var(--status-pending-bg);
+  color: var(--status-pending-text);
+}
+
+.status--active {
   background: var(--status-scheduled-bg);
   color: var(--status-scheduled-text);
 }
@@ -220,9 +227,9 @@ body {
   color: var(--status-shipped-text);
 }
 
-.status--pending {
-  background: var(--status-pending-bg);
-  color: var(--status-pending-text);
+.status--problem {
+  background: var(--status-problem-bg);
+  color: var(--status-problem-text);
 }
 
 .empty-state {
@@ -235,7 +242,7 @@ body {
 
 /* FullCalendar colors each event from these --fc-event-* variables,
    so setting them on an event's class recolors just that event. */
-.event--scheduled {
+.event--active {
   --fc-event-bg-color: var(--status-scheduled-bg);
   --fc-event-border-color: var(--status-scheduled-bg);
   --fc-event-text-color: var(--status-scheduled-text);
@@ -247,10 +254,16 @@ body {
   --fc-event-text-color: var(--status-shipped-text);
 }
 
-.event--pending {
+.event--open {
   --fc-event-bg-color: var(--status-pending-bg);
   --fc-event-border-color: var(--status-pending-bg);
   --fc-event-text-color: var(--status-pending-text);
+}
+
+.event--problem {
+  --fc-event-bg-color: var(--status-problem-bg);
+  --fc-event-border-color: var(--status-problem-bg);
+  --fc-event-text-color: var(--status-problem-text);
 }
 
 .fc .fc-event {

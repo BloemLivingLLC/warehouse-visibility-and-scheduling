@@ -32,6 +32,7 @@ export type Shipment = {
   orderkey: string
   order_number: string
   status: string
+  status_label: string
   carrier: string
   ship_date: string | null
   load_id: string

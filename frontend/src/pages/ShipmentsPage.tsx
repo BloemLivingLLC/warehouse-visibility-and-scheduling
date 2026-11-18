@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useShipments } from '../hooks/useShipments'
 import { formatDate } from '../utils/formatDate'
+import { statusTone } from '../utils/statusTone'
 
 export default function ShipmentsPage() {
   const { shipments, loading, error } = useShipments()
@@ -21,6 +22,11 @@ export default function ShipmentsPage() {
       (s.destination ?? '').toLowerCase().includes(query)
     return matchesStatus && matchesSearch
   })
+    // one [code, label] pair per status in the data, in lifecycle order
+  const statusOptions = Array.from(new Map(shipments.map((s) => [s.status, s.status_label])))
+    .filter(([code]) => code)
+    .sort(([a], [b]) => a.localeCompare(b))
+  
 
   return (
     <section>
@@ -40,14 +46,11 @@ export default function ShipmentsPage() {
           onChange={(e) => setStatusFilter(e.target.value)}
         >
           <option value="All">All statuses</option>
-          {Array.from(new Set(shipments.map((s) => s.status)))
-            .filter(Boolean)
-            .sort()
-            .map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
+          {statusOptions.map(([code, label]) => (
+            <option key={code} value={code}>
+              {label}
+            </option>
+          ))}
         </select>
         <p className="result-count">
           {filteredShipments.length} of {shipments.length} shipments
@@ -76,8 +79,8 @@ export default function ShipmentsPage() {
                 <td className="order-number">{shipment.order_number}</td>
                 <td>{shipment.customer || 'N/A'}</td>
                 <td>
-                  <span className={`status status--${shipment.status.toLowerCase()}`}>
-                    {shipment.status}
+                  <span className={`status status--${statusTone(shipment.status)}`}>
+                    {shipment.status_label}
                   </span>
                 </td>
                 <td>{shipment.ship_date ? formatDate(shipment.ship_date) : 'N/A'}</td>
